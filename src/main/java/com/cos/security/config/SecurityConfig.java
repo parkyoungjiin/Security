@@ -8,16 +8,20 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.cos.security.oauth.PrincipalOauth2UserService;
+
+import lombok.AllArgsConstructor;
+
 
 @Configuration // IoC 빈(bean)을 등록
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true) // Secured 어노테이션 활성화
+@AllArgsConstructor
 public class SecurityConfig {
+	@Autowired
+	private PrincipalOauth2UserService principalOauth2UserService;
 
-
-	@Bean // 해당 메서드의 리턴되는 오브젝트를 Ioc로 등록한다.
-	public BCryptPasswordEncoder encodePwd() {
-		return new BCryptPasswordEncoder();
-	}
+	@Autowired
+    BCryptPasswordEncoder encoder;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -34,7 +38,12 @@ public class SecurityConfig {
 				.formLogin()
 				.loginPage("/loginForm")
 				.loginProcessingUrl("/login")// login 주소가 호출되면 시큐리티가 낚아채서 로그인 진행함.
-				.defaultSuccessUrl("/");
+				.defaultSuccessUrl("/")
+				.and()
+				.oauth2Login()
+				.loginPage("/loginForm")
+				.userInfoEndpoint()
+				.userService(principalOauth2UserService);
 
 		return http.build();
 	}

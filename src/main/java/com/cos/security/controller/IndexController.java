@@ -1,17 +1,24 @@
 package com.cos.security.controller;
 
+import java.security.Principal;
+
 import javax.management.relation.Role;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.cos.security.auth.PrincipalDetails;
 import com.cos.security.model.User;
 import com.cos.security.repository.UserRepository;
 
@@ -23,6 +30,28 @@ public class IndexController {
 	
 	@Autowired
 	BCryptPasswordEncoder bCryptPasswordEncoder;
+	
+	@GetMapping("/test/login")
+	public @ResponseBody String testLogin(Authentication authentication, @AuthenticationPrincipal PrincipalDetails userDetails) {
+		System.out.println("/test/login ========");
+		//User 객체 찾는 방법 1 : PrincipalDetails를 authentication.getPrincipal 후 다운캐스팅하여 User 객체를 저장.
+		PrincipalDetails principalDetails = (PrincipalDetails)authentication.getPrincipal();  
+		//User 객체 찾는 방법 2 : @AuthenticationPrincipal 활용하여 principalDetails를 통해 User객체 저장.
+		System.out.println("authentication : " + principalDetails.getUser());
+		System.out.println("userDetails : " + userDetails.getUser());
+		return "세션 정보 확인하기";
+	}
+	@GetMapping("/test/oauth/login")
+	public @ResponseBody String testOauthLogin(Authentication authentication, @AuthenticationPrincipal OAuth2User oAuth) {
+		System.out.println("/test/oauth/login ========");
+		//User 객체 찾는 방법 1 : PrincipalDetails를 authentication.getPrincipal 후 다운캐스팅하여 User 객체를 저장.
+		OAuth2User oAuth2User = (OAuth2User)authentication.getPrincipal();  
+		//User 객체 찾는 방법 2 : @AuthenticationPrincipal 활용하여 principalDetails를 통해 User객체 저장.
+		System.out.println("authentication : " + oAuth2User.getAttributes());
+		System.out.println("oAuth2User : " + oAuth.getAttributes());
+		
+		return "oauth세션 정보 확인하기";
+	}
 	
 	@GetMapping({ "", "/" })
 	public String index() {
