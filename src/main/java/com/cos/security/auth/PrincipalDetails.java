@@ -13,10 +13,11 @@ import com.cos.security.model.User;
 import lombok.Data;
 @Data
 public class PrincipalDetails implements UserDetails, OAuth2User{ //UserDetails, OAuth2User를 implements하여 분기하지 않아도 됨.
+	
 	//User 정보를 PrincipalDetails에 저장해야 하기에, 컴포지션을 사용.
 	// ** 컴포지션 ** : 기존 클래스가 새로운 클래스의 구성요소가 되는 것을 말한다.
 	private User user;
-	private Map<String, Object> attributes;
+	private Map<String, Object> attributes; // attributes는 로그인을 통해 받은 정보들을 그대로 담아서 return 해주는 역할을 한다.
 	
 	// 일반 로그인에 사용하는 생성자.
 	public PrincipalDetails(User user) {

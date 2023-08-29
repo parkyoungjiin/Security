@@ -29,7 +29,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService{
 		
 		System.out.println("getClientRegistration:" + userRequest.getClientRegistration());
 		System.out.println("token:" + userRequest.getAccessToken());
-		System.out.println(" :" + super.loadUser(userRequest).getAttributes());
+		System.out.println(" loadUser:" + super.loadUser(userRequest).getAttributes());
 		
 		//OAuth 로그인 후 attributes 정보를 갖고 있음. 
 		OAuth2User oauth2User = super.loadUser(userRequest);
@@ -42,8 +42,11 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService{
 		String role = "ROLE_USER";
 	
 //		System.out.println("비밀번호 확인하기 : " + password);
+		
+		//findByUsername 메서드를 통해 username에 맞는 user엔티티가 DB에 있는 지 확인한다.
 		User userEntity = userRepository.findByUsername(username);
 		
+		// DB에 없는 경우 Entity 객체가 null => 회원가입 강제 진행
 		if(userEntity == null) {
 			System.out.println("비회원이기에 회원가입을 진행합니다.");
 			userEntity = User.builder()
@@ -55,10 +58,12 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService{
 					.providerId(providerId)
 					.build();
 			userRepository.save(userEntity);
+		// DB에 있는 경우 Entity 객체가 null => 회원가입 진행 X, 로그인 진행 
 		}else {
-			
+			System.out.println("구글 로그인을 이미한 적이 있다.");
 		}
 		
+		//Details객체를 생성하여 로그인을 진행함.
 		return new PrincipalDetails(userEntity, oauth2User.getAttributes());
 	}
 }

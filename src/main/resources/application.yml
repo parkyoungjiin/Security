@@ -13,7 +13,7 @@ spring:
     url: jdbc:mysql://localhost:3306/security?serverTimezone=Asia/Seoul
     username: cos
     password: cos1234
-    
+      
   jpa:
     open-in-view: true
     hibernate:
@@ -34,4 +34,11 @@ spring:
             scope:
             - email
             - profile
+            
+          facebook:
+            client-id: 6471218449598719
+            client-secret: a05e8691d5318b66690e9967ece05b4c
+            scope:
+            - email
+            - public_profile
           
