@@ -2,11 +2,11 @@ package com.cos.security.oauth.provider;
 
 import java.util.Map;
 
-public class FacebookUserInfo2 implements OAuth2UserInfo{
+public class NaverUserInfo implements OAuth2UserInfo{
 	
 	private Map<String, Object> attributes; // PrincipalOauthUserService 클래스의 oauth2User의 getAttributes()를 받음.
 	
-	public FacebookUserInfo2(Map<String, Object> attributes) {
+	public NaverUserInfo(Map<String, Object> attributes) {
 		this.attributes = attributes;
 	}
 	
@@ -17,7 +17,7 @@ public class FacebookUserInfo2 implements OAuth2UserInfo{
 
 	@Override
 	public String getProvider() {
-		return "facebook";
+		return "naver";
 	}
 
 	@Override

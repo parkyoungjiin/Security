@@ -2,22 +2,22 @@ package com.cos.security.oauth.provider;
 
 import java.util.Map;
 
-public class GoogleUserInfo implements OAuth2UserInfo{
+public class FacebookUserInfo implements OAuth2UserInfo{
 	
 	private Map<String, Object> attributes; // PrincipalOauthUserService 클래스의 oauth2User의 getAttributes()를 받음.
 	
-	public GoogleUserInfo(Map<String, Object> attributes) {
+	public FacebookUserInfo(Map<String, Object> attributes) {
 		this.attributes = attributes;
 	}
 	
 	@Override
 	public String getProviderId() {
-		return (String)attributes.get("sub");
+		return (String)attributes.get("id");
 	}
 
 	@Override
 	public String getProvider() {
-		return "google";
+		return "facebook";
 	}
 
 	@Override
@@ -27,6 +27,7 @@ public class GoogleUserInfo implements OAuth2UserInfo{
 
 	@Override
 	public String getName() {
+		// TODO Auto-generated method stub
 		return (String)attributes.get("name");
 	}
 	
